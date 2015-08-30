@@ -77,7 +77,7 @@
 ;; migemo is soft-required now; this file has no effect unless migemo is installed.
 ;;
 ;; Revision 1.16  2008/10/03 20:43:18  rubikitch
-;; Use with helm-match-plugin.el
+;; Use with helm-match-plugin.el (2015/8/30 `helm-match-plugin' was renamed to `helm-multi-match')
 ;;
 ;; Revision 1.15  2008/10/03 20:01:46  rubikitch
 ;; refactoring
@@ -148,16 +148,16 @@ With prefix arugument, `helm-pattern' is migemo-ized, otherwise normal `helm'."
     (setq helm-previous-migemo-info (cons pattern (migemo-get-pattern pattern))))
   (string-match (cdr helm-previous-migemo-info) str))
 
-  (cl-defun helm-mp-3migemo-match (str &optional (pattern helm-pattern))
-    (cl-loop for (pred . re) in (helm-mp-3-get-patterns pattern)
+  (cl-defun helm-mm-3migemo-match (str &optional (pattern helm-pattern))
+    (cl-loop for (pred . re) in (helm-mm-3-get-patterns pattern)
              always (funcall pred (helm-string-match-with-migemo str re))))
-  (defun helm-mp-3migemo-search (pattern &rest ignore)
-    (helm-mp-3-search-base pattern 'migemo-forward 'migemo-forward))
-  (defun helm-mp-3migemo-search-backward (pattern &rest ignore)
-    (helm-mp-3-search-base pattern 'migemo-backward 'migemo-backward))
+  (defun helm-mm-3migemo-search (pattern &rest ignore)
+    (helm-mm-3-search-base pattern 'migemo-forward 'migemo-forward))
+  (defun helm-mm-3migemo-search-backward (pattern &rest ignore)
+    (helm-mm-3-search-base pattern 'migemo-backward 'migemo-backward))
 ;; (helm-string-match-with-migemo "日本語入力" "nihongo")
 ;; (helm-string-match-with-migemo "日本語入力" "nyuuryoku")
-;; (helm-mp-3migemo-match "日本語入力" "nihongo nyuuryoku")
+;; (helm-mm-3migemo-match "日本語入力" "nihongo nyuuryoku")
 (defun helm-compile-source--migemo (source)
   (if (not (featurep 'migemo))
       source
@@ -165,11 +165,11 @@ With prefix arugument, `helm-pattern' is migemo-ized, otherwise normal `helm'."
             (or (assoc 'candidates-in-buffer source)
                 (equal '(identity) (assoc-default 'match source))))
            
-           (matcher 'helm-mp-3migemo-match)
+           (matcher 'helm-mm-3migemo-match)
            (searcher (if (assoc 'search-from-end source)
                          
-                           'helm-mp-3migemo-search-backward
-                         'helm-mp-3migemo-search)))
+                           'helm-mm-3migemo-search-backward
+                         'helm-mm-3migemo-search)))
       (cond (helm-use-migemo
              `((delayed)
                (search ,@(assoc-default 'search source) ,searcher)
