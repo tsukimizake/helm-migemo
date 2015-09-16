@@ -198,6 +198,10 @@ Bind `helm-use-migemo' = t in COMMAND.
            (helm-idle-delay helm-migemize-command-idle-delay))
        ad-do-it)))
 
+;; for backward compatibility
+(defalias 'helm-mp-3migemo-match 'helm-mm-3migemo-match)
+(defalias 'helm-mp-3migemo-search 'helm-mm-3migemo-search)
+(defalias 'helm-mp-3migemo-search-backward 'helm-mm-3migemo-search-backward)
 
 (provide 'helm-migemo)
 
